@@ -50,7 +50,7 @@ parser.add_argument('-c', '--createtable', dest='createtable',default=False,acti
                 help='create sql string with create table')
 parser.add_argument('-t', '--tablename', dest='tablename',default='poly',action='store_true',
                 help='to assign a name of the table (default=poly')
-parser.add_argument('-s','--silent', dest='silent',help="dont'show output, if you don't need a output file this is si default",
+parser.add_argument('-s','--silent', dest='silent',help="dont'show output (default behavior)",
                     action='store_true',default=False)
 args = parser.parse_args()
 
