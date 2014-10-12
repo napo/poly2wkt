@@ -50,7 +50,7 @@ parser.add_argument('-c', '--createtable', dest='createtable',default=False,acti
                 help='create sql string with create table')
 parser.add_argument('-t', '--tablename', dest='tablename',default='poly',action='store_true',
                 help='to assign a name of the table (default=poly')
-parser.add_argument('-s','--silent', dest='silent',help="dont'show output (default behavior)",
+parser.add_argument('-s','--silent', dest='silent',help="dont'show output, if you don't need a output file this is si default",
                     action='store_true',default=False)
 args = parser.parse_args()
 
@@ -63,7 +63,7 @@ if (args.sqlstring):
 if (args.createtable):
     out = "CREATE TABLE %s (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT);\n" % (tablename)
     out += "SELECT AddGeometryColumn('%s', 'geom', 4326, 'POLYGON', 2);\n" % (tablename)
-    out += "INSERT INTO %s (geom) values (GeometryFromText('%s'),4326));\n" % (tablename,wkt)
+    out += "INSERT INTO %s (geom) values (GeometryFromText('%s',4326));\n" % (tablename,wkt)
 if out == "":
     out = wkt
 if (out is None):
