@@ -1,14 +1,15 @@
 #!/usr/bin/python
 import sys
 import argparse
-def createwkt(polyfile):
+def loopfile(polyfile):
 	polyline=''
 	with open(polyfile,'r') as f:
 		read_data = f.readlines()
 	f.close()
+	polylines = []
 	polyline = ""
 	countend = 0
-	countpoly = 0
+#	countpoly = 0
 	for l in read_data:
 		s = l.strip()
 		if len(s) > 1:
@@ -28,18 +29,31 @@ def createwkt(polyfile):
 		        pass
 
 		if len(s) == 1:
-		    countpoly += 1
-		    if countpoly == 1:
-		        polyline = "POLYGON (("
-		    else:
-		        polyline = "POLYGON (("
+                  polyline = "("
+#		    countpoly += 1
+#		    if countpoly == 1:
+#		        polyline = "POLYGON (("
+#                     
+#		    else:
+#		        polyline = "POLYGON (("
 		if s == "END":
 		    countend += 1
 		    if (countend%2) == 1:
 		        polyline = polyline[0:len(polyline)-1]
-		        polyline += "))"
-	return polyline
-
+		        polyline += ")" #)"
+		        polylines.append(polyline)
+	return polylines
+ 
+def createwkt(polylines):
+    polygon=""
+    if len(polylines) >0:
+        polygon = "POLYGON ("
+        for p in polylines:
+            polygon += p +","
+        polygon = polygon[0:len(polygon)-1]
+        polygon += ")"
+    return polygon
+    
 parser = argparse.ArgumentParser(description='convert a .poly file in .wkt format')
 parser.add_argument('infile', metavar='infile', type=str,
                    help='inputfile')
@@ -55,7 +69,7 @@ parser.add_argument('-s','--silent', dest='silent',help="dont'show output, if yo
 args = parser.parse_args()
 
 tablename = args.tablename
-wkt = createwkt(args.infile)
+wkt = createwkt(loopfile(args.infile))
 out = None
 
 if (args.sqlstring):
